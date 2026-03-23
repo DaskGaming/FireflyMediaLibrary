@@ -1,0 +1,32 @@
+{
+  "name": "firefly-media-library",
+  "version": "1.0.0",
+  "description": "Firefly Media Library",
+  "main": "src/main.js",
+  "author": "Firefly",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build-linux": "electron-builder --linux",
+    "build-win": "electron-builder --win",
+    "build-test": "electron-builder --linux --config.linux.target=dir"
+  },
+  "build": {
+    "appId": "com.firefly.medialibrary",
+    "productName": "Firefly Media Library",
+    "linux": {
+      "target": ["zip"],
+      "category": "Video",
+      "executableName": "firefly-media-library"
+    },
+    "win": {
+      "target": ["portable"]
+    },
+    "files": ["src/**/*"],
+    "directories": { "output": "dist" }
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  }
+}
