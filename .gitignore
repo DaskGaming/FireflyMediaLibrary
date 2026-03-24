@@ -1,1 +1,4 @@
-firefly-media-library-1.0.0.zip 
+node_modules/
+dist/
+out/
+firefly-media-library-1.0.0.zip
