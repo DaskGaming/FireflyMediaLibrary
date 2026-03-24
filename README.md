@@ -1,4 +1,4 @@
-# 🦋 Firefly Media Library
+# Firefly Media Library
 
 A Netflix-style local media frontend for Steam Deck. Browse and play your Movies, TV Shows, and Videos through a clean interface — no internet required, no subscriptions.
 
@@ -6,15 +6,15 @@ A Netflix-style local media frontend for Steam Deck. Browse and play your Movies
 
 ## Features
 
-- 🎬 **Movies** — poster grid with TMDb genre filtering and full detail view
-- 📺 **TV Shows** — season and episode browser with artwork and thumbnails
-- 🎞️ **Videos** — folder-based library for home videos, concerts, recordings
-- 🎭 **Genres** — browse all content by genre in horizontal scrolling rows (TMDb order)
-- 📦 **Collections** — auto-detected from folder names (e.g. "Marvel Collection")
-- 🔍 **Search** — searches Movies, TV Shows, and Videos simultaneously
-- ▶️ **VLC playback** — launches VLC fullscreen with resume-where-you-left-off
-- 💤 **Sleep-safe** — prevents display sleep during playback, cleanly stops VLC on Deck sleep
-- 🎮 **Steam Deck optimised** — large touch targets, Web Browser controller layout, Game Mode ready
+- **Movies** — poster grid with TMDb genre filtering and full detail view
+- **TV Shows** — season and episode browser with artwork and thumbnails
+- **Videos** — folder-based library for home videos, concerts, recordings
+- **Genres** — browse all content by genre in horizontal scrolling rows (TMDb order)
+- **Collections** — auto-detected from folder names (e.g. "Marvel Collection")
+- **Search** — searches Movies, TV Shows, and Videos simultaneously
+- **VLC playback** — launches VLC fullscreen with resume-where-you-left-off
+- **Sleep-safe** — prevents display sleep during playback, cleanly stops VLC on Deck sleep
+- **Steam Deck optimised** — large touch targets, Web Browser controller layout, Game Mode ready
 
 ---
 
