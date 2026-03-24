@@ -568,14 +568,6 @@ html, body {
       </div>
       <div class="settings-hint">Steam Deck: flatpak run org.videolan.VLC</div>
     </div>
-    <hr class="settings-divider">
-    <div class="settings-section">
-      <div class="settings-section-title">TMDB API Key <span style="font-weight:400;color:var(--text3)">(optional)</span></div>
-      <div class="settings-row">
-        <input class="settings-input" id="tmdb-input" type="password" placeholder="Free key at themoviedb.org → Settings → API">
-        <button class="settings-btn" id="tmdb-show-btn">Show</button>
-      </div>
-    </div>
     <div style="margin-top:36px;display:flex;gap:14px;flex-wrap:wrap">
       <button class="settings-btn primary" id="save-settings-btn">✓  Save & Refresh Library</button>
       <button class="settings-btn" id="cancel-settings-btn">Cancel</button>
@@ -1250,7 +1242,6 @@ function populateSettings() {
   renderPaths('tv-path-list', config.tvPaths||[], 'tvPaths');
   renderPaths('video-path-list', config.videoPaths||[], 'videoPaths');
   document.getElementById('vlc-input').value = config.vlcPath||'';
-  document.getElementById('tmdb-input').value = config.tmdbApiKey||'';
 }
 
 function renderPaths(listId, paths, key) {
@@ -1276,7 +1267,6 @@ function addPath(listId, inputId, key) {
 
 async function saveSettings() {
   config.vlcPath = document.getElementById('vlc-input').value.trim();
-  config.tmdbApiKey = document.getElementById('tmdb-input').value.trim();
   await window.api.saveConfig(config);
   document.getElementById('loading').classList.remove('hidden');
   document.querySelector('.loading-sub').textContent = 'Refreshing library…';
@@ -1368,11 +1358,6 @@ document.getElementById('tv-browse-btn').addEventListener('click', async () => {
 document.getElementById('tv-add-btn').addEventListener('click', () => addPath('tv-path-list','tv-path-input','tvPaths'));
 document.getElementById('tv-path-input').addEventListener('keydown', e => { if(e.key==='Enter') addPath('tv-path-list','tv-path-input','tvPaths'); });
 document.getElementById('vlc-browse-btn').addEventListener('click', async () => { const f=await window.api.browseFolder(); if(f) document.getElementById('vlc-input').value=f; });
-document.getElementById('tmdb-show-btn').addEventListener('click', function() {
-  const inp=document.getElementById('tmdb-input');
-  inp.type=inp.type==='password'?'text':'password';
-  this.textContent=inp.type==='password'?'Show':'Hide';
-});
 document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
 document.getElementById('cancel-settings-btn').addEventListener('click', () => showTab('home'));
 
