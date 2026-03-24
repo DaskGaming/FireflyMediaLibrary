@@ -20,8 +20,7 @@ const DEFAULT_CONFIG = {
     path.join(os.homedir(), 'Videos', 'TV Shows')
   ],
   videoPaths: [],
-  vlcPath: detectVLC(),
-  tmdbApiKey: ''
+  vlcPath: detectVLC()
 };
 
 const VIDEO_EXTS = new Set([
