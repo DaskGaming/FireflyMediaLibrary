@@ -8,7 +8,6 @@
   "scripts": {
     "start": "electron .",
     "build-linux": "electron-builder --linux",
-    "build-win": "electron-builder --win",
     "build-test": "electron-builder --linux --config.linux.target=dir"
   },
   "build": {
@@ -18,9 +17,6 @@
       "target": ["zip"],
       "category": "Video",
       "executableName": "firefly-media-library"
-    },
-    "win": {
-      "target": ["portable"]
     },
     "files": ["src/**/*"],
     "directories": { "output": "dist" }
