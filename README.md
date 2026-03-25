@@ -1,6 +1,6 @@
 # Firefly Media Library
 
-A Netflix-style local media frontend for Steam Deck. Browse and play your Movies, TV Shows, and Videos through a clean interface — no internet required, no subscriptions.
+A Netflix-style local media frontend for Steam Deck. Browse and play your Movies, TV Shows, and Videos through a clean interface — no internet required, no subscriptions.  Disclaimer: this program was created with the assistance of Cluade AI.
 
 ---
 
