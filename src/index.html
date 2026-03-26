@@ -27,8 +27,10 @@ html, body {
   font-family: system-ui, sans-serif;
   font-size: 16px; -webkit-user-select: none; user-select: none;
 }
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-thumb { background: #2a2a3a; border-radius: 2px; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg2); border-radius: 5px; }
+::-webkit-scrollbar-thumb { background: #3a3a50; border-radius: 5px; border: 2px solid var(--bg2); }
+::-webkit-scrollbar-thumb:hover { background: #52527a; }
 
 /* ── Nav ──────────────────────────────────────────────────────────────────── */
 #navbar {
@@ -1103,7 +1105,7 @@ function normalizeGenre(raw) {
 function extractGenres(items) {
   const set = new Set();
   items.forEach(item => {
-    if (item.genre) item.genre.split(/[,/|]/).map(g => normalizeGenre(g)).filter(Boolean).forEach(g => set.add(g));
+    if (item.genre) splitGenres(item.genre).map(g => normalizeGenre(g)).filter(Boolean).forEach(g => set.add(g));
   });
   return Array.from(set).sort();
 }
@@ -1117,10 +1119,14 @@ function tmdbGenresFor(items, tmdbList) {
   return ordered;
 }
 
+function splitGenres(raw) {
+  return raw.split(/\s*[,|/]\s*/).map(g => g.trim()).filter(Boolean);
+}
+
 function filterByGenre(items, genre) {
   if (genre === 'All') return items;
   return items.filter(item =>
-    item.genre && item.genre.split(/[,/|]/).map(g => normalizeGenre(g)).includes(genre)
+    item.genre && splitGenres(item.genre).map(g => normalizeGenre(g)).includes(genre)
   );
 }
 

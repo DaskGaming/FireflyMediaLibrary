@@ -117,12 +117,14 @@ async function parseNFO(folder) {
     if (!nfo) return {};
     const xml = await fsp.readFile(path.join(folder, nfo), 'utf8');
     const get = tag => { const m = xml.match(new RegExp(`<${tag}[^>]*>([^<]*)</${tag}>`, 'i')); return m ? m[1].trim() : ''; };
+    // Use global flag to collect ALL matching tags (e.g. multiple <genre> entries)
+    const getAll = tag => { const re = new RegExp(`<${tag}[^>]*>([^<]*)</${tag}>`, 'gi'); return [...xml.matchAll(re)].map(m => m[1].trim()).filter(Boolean); };
     return {
       title: get('title'),
       year: parseInt(get('year')) || null,
       plot: get('plot') || get('outline'),
       rating: parseFloat(get('rating')) || null,
-      genre: get('genre'),
+      genre: getAll('genre').join(', '),
       director: get('director'),
       runtime: get('runtime')
     };
