@@ -28,10 +28,10 @@ echo ""
 echo "▸ Setting up Firefly Media Library..."
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ZIPFILE=$(find "$SCRIPT_DIR" -name "*linux-x64.zip" 2>/dev/null | head -1)
+ZIPFILE=$(find "$SCRIPT_DIR" -name "*firefly-media-library.zip" 2>/dev/null | head -1)
 
 if [ -z "$ZIPFILE" ]; then
-    echo "  ERROR: No linux-x64.zip found next to install.sh"
+    echo "  ERROR: No firefly-media-library.zip found next to install.sh"
     echo "  Make sure the zip from dist/ is in the same folder as install.sh"
     exit 1
 fi

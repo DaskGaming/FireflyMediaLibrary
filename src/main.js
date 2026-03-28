@@ -54,7 +54,17 @@ function loadConfig() {
   try {
     if (fs.existsSync(CONFIG_FILE)) {
       const data = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
-      return { ...DEFAULT_CONFIG, ...data };
+      const cfg = { ...DEFAULT_CONFIG, ...data };
+      // Re-detect VLC if the saved path no longer exists or points to a directory
+      const vp = cfg.vlcPath || '';
+      const isInvalid = !vp ||
+        (!vp.startsWith('flatpak') && (!fs.existsSync(vp) || fs.statSync(vp).isDirectory()));
+      if (isInvalid) {
+        console.log('Saved VLC path invalid, re-detecting:', vp);
+        cfg.vlcPath = detectVLC();
+        saveConfig(cfg);
+      }
+      return cfg;
     }
   } catch (e) { console.error('Config load error:', e); }
   saveConfig(DEFAULT_CONFIG);
@@ -117,14 +127,12 @@ async function parseNFO(folder) {
     if (!nfo) return {};
     const xml = await fsp.readFile(path.join(folder, nfo), 'utf8');
     const get = tag => { const m = xml.match(new RegExp(`<${tag}[^>]*>([^<]*)</${tag}>`, 'i')); return m ? m[1].trim() : ''; };
-    // Use global flag to collect ALL matching tags (e.g. multiple <genre> entries)
-    const getAll = tag => { const re = new RegExp(`<${tag}[^>]*>([^<]*)</${tag}>`, 'gi'); return [...xml.matchAll(re)].map(m => m[1].trim()).filter(Boolean); };
     return {
       title: get('title'),
       year: parseInt(get('year')) || null,
       plot: get('plot') || get('outline'),
       rating: parseFloat(get('rating')) || null,
-      genre: getAll('genre').join(', '),
+      genre: get('genre'),
       director: get('director'),
       runtime: get('runtime')
     };
@@ -547,6 +555,15 @@ ipcMain.handle('play', (_, item) => {
   const filePath = item.path;
 
   if (!fs.existsSync(filePath)) return { error: 'File not found: ' + filePath };
+
+  // Validate VLC path before attempting to spawn
+  const isValidVlc = vlcPath && (
+    vlcPath.startsWith('flatpak') ||
+    (fs.existsSync(vlcPath) && !fs.statSync(vlcPath).isDirectory())
+  );
+  if (!isValidVlc) {
+    return { error: `VLC not found at "${vlcPath}". Go to Settings and update the VLC path, or install VLC via: flatpak install flathub org.videolan.VLC` };
+  }
 
   const args = [
     filePath,
