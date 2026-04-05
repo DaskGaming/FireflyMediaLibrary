@@ -127,12 +127,13 @@ async function parseNFO(folder) {
     if (!nfo) return {};
     const xml = await fsp.readFile(path.join(folder, nfo), 'utf8');
     const get = tag => { const m = xml.match(new RegExp(`<${tag}[^>]*>([^<]*)</${tag}>`, 'i')); return m ? m[1].trim() : ''; };
+    const getAll = tag => { const re = new RegExp(`<${tag}[^>]*>([^<]*)</${tag}>`, 'gi'); const vals = []; let m; while ((m = re.exec(xml)) !== null) { const v = m[1].trim(); if (v) vals.push(v); } return vals.join(', '); };
     return {
       title: get('title'),
       year: parseInt(get('year')) || null,
       plot: get('plot') || get('outline'),
       rating: parseFloat(get('rating')) || null,
-      genre: get('genre'),
+      genre: getAll('genre'),
       director: get('director'),
       runtime: get('runtime')
     };
@@ -506,16 +507,17 @@ ipcMain.handle('scan-media', async () => {
       }
     }
 
-    // Detect collections
+    // Detect collections — walk all folder parts so sub-collections are included
     const collections = {};
     for (const movie of movies) {
       const parts = movie.folder ? movie.folder.split(path.sep) : [];
-      const colPart = parts.find(p => /collection/i.test(p));
-      if (colPart) {
+      const colParts = parts.filter(p => /collection/i.test(p));
+      for (const colPart of colParts) {
         const colName = colPart.replace(/collection/i, '').replace(/[-_]/g, ' ').trim() || 'Collection';
-        const key = colName || colPart;
-        if (!collections[key]) collections[key] = [];
-        collections[key].push(movie);
+        if (!collections[colName]) collections[colName] = [];
+        if (!collections[colName].find(m => m.id === movie.id)) {
+          collections[colName].push(movie);
+        }
       }
     }
 

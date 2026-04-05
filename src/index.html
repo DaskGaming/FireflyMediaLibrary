@@ -426,7 +426,6 @@ html, body {
   <button class="nav-tab" data-tab="movies">Movies</button>
   <button class="nav-tab" data-tab="tv">TV Shows</button>
   <button class="nav-tab" data-tab="videos">Videos</button>
-  <button class="nav-tab" data-tab="genres">Genres</button>
   <button class="nav-tab" data-tab="collections" id="collections-tab" style="display:none">Collections</button>
   <div class="nav-spacer"></div>
   <div id="search-wrap">
@@ -502,14 +501,6 @@ html, body {
         <div id="video-folder-count"></div>
         <div id="video-folder-list"></div>
       </div>
-    </div>
-  </div>
-
-  <!-- Genres -->
-  <div class="page" id="genres-page">
-    <div style="padding: calc(var(--nav-h) + 16px) 0 60px">
-      <div class="grid-page-title" style="padding: 0 48px; margin-bottom: 24px">Browse by Genre</div>
-      <div id="genres-content"></div>
     </div>
   </div>
 
@@ -655,7 +646,6 @@ async function init() {
     buildMoviesPage();
     buildTVPage();
     buildVideosPage();
-    buildGenresPage();
     buildCollectionsPage();
   } catch (err) {
     console.error('Init error:', err);
@@ -672,7 +662,7 @@ function showTab(tab) {
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   const map = {
     home:'home-page', movies:'movies-page', tv:'tv-page', videos:'videos-page',
-    genres:'genres-page', collections:'collections-page',
+    collections:'collections-page',
     search:'search-page', settings:'settings-page'
   };
   document.getElementById(map[tab])?.classList.add('active');
@@ -1010,45 +1000,6 @@ async function playVideoItem(item) {
   }
 }
 
-// ── Genres page ───────────────────────────────────────────────────────────────
-function buildGenresPage() {
-  const content = document.getElementById('genres-content');
-  content.innerHTML = '';
-
-  // Merge both TMDb lists (deduplicated) then append any extra genres found in library
-  const tmdbAll = [...new Set([...TMDB_MOVIE_GENRES, ...TMDB_TV_GENRES])];
-  const libraryGenres = extractGenres([...allMovies, ...allTV]);
-  const genreOrder = tmdbAll.filter(g => libraryGenres.includes(g));
-  libraryGenres.filter(g => !tmdbAll.includes(g)).sort().forEach(g => genreOrder.push(g));
-
-  if (!genreOrder.length) {
-    content.innerHTML = `<div class="col-empty" style="padding:60px 48px">No genre information found.<br>Add a TMDB API key or ensure your .nfo files contain &lt;genre&gt; tags.</div>`;
-    return;
-  }
-
-  genreOrder.forEach(genre => {
-    const movies = filterByGenre(allMovies, genre).sort((a,b) => a.title.localeCompare(b.title));
-    const shows  = filterByGenre(allTV, genre).sort((a,b) => a.title.localeCompare(b.title));
-    const all = [...movies, ...shows];
-    if (!all.length) return;
-
-    const total = all.length;
-    const row = document.createElement('div');
-    row.className = 'row';
-    row.innerHTML = `
-      <div class="row-label" style="padding: 0 48px; margin-bottom: 12px; display:flex; align-items:center; gap:10px">
-        ${genre}
-        <span style="font-size:10px; color:var(--text3); font-weight:500; letter-spacing:1px">
-          ${total} title${total!==1?'s':''}
-        </span>
-      </div>
-      <div class="row-scroll"></div>`;
-    const scroll = row.querySelector('.row-scroll');
-    all.forEach(item => scroll.appendChild(makeCard(item, item.type==='tv' ? 'tv' : 'movie')));
-    content.appendChild(row);
-  });
-}
-
 // ── Collections page ──────────────────────────────────────────────────────────
 function buildCollectionsPage() {
   const tab = document.getElementById('collections-tab');
@@ -1282,7 +1233,7 @@ async function saveSettings() {
     playback=data.playback||{};
     allCollections=data.collections||{}; allGenres=data.genres||[];
     activeMovieGenre='All'; activeTVGenre='All';
-    buildHome(); buildMoviesPage(); buildTVPage(); buildVideosPage(); buildGenresPage(); buildCollectionsPage();
+    buildHome(); buildMoviesPage(); buildTVPage(); buildVideosPage(); buildCollectionsPage();
     showToast('✓ Settings saved');
     showTab('home');
   } catch (err) {
