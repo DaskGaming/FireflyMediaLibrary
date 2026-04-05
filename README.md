@@ -215,7 +215,7 @@ Both are preserved when you update via `install.sh`.
 
 ## Updating
 
-1. Download the new `Firefly-Media-Library-linux-x64.zip` and `install.sh` from Releases
+1. Download the new `Firefly-Media-Library.zip` and `install.sh` from Releases
 2. Run `bash install.sh` — overwrites the app, preserves settings and watch history
 
 ---
