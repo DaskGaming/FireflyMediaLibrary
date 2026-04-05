@@ -32,7 +32,7 @@ A Netflix-style local media frontend for Steam Deck. Browse and play your Movies
 
 Go to the [Releases](../../releases) page and download both files:
 
-- `Firefly-Media-Library-linux-x64.zip`
+- `Firefly-Media-Library.zip`
 - `install.sh`
 
 Place both files in the **same folder**.
